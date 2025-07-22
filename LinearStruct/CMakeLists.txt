@@ -10,3 +10,7 @@ add_executable(chainList 02_linkList/main2.c
 add_executable(linkLoop 03_linkLoop/main.c
         03_linkLoop/linkLoop.c
         03_linkLoop/linkLoop.h)
+add_executable(doubleLinkLoop 04_doubleLinkLoop/main.c
+        04_doubleLinkLoop/doubleLinkLoop.c
+        04_doubleLinkLoop/doubleLinkLoop.h
+)
