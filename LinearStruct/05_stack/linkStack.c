@@ -22,6 +22,7 @@ void releaseLinkStack(LinkStack *stack) {
             stack->count--;
         }
         printf("The stack has been cleared: %d elements left.\n", stack->count);
+        free(stack); // 释放栈头
     }
 }
 
