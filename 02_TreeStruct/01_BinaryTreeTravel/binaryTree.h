@@ -19,7 +19,12 @@ void visitTreeNode(TreeNode *node); // 自定义访问节点时将执行的操�
 void preorderTraversal(BinaryTree *tree); // 前序遍历
 void inorderTraversal(BinaryTree *tree); // 中序遍历
 void postorderTraversal(BinaryTree *tree); // 后序遍历
+// 非递归式三序遍历
+void NoRecursionPreorder(BinaryTree *tree);
+void NoRecursionInorder(BinaryTree *tree);
+void NoRecursionPostorder(BinaryTree *tree);
 // 层序遍历属于 BFS(Breadth-First Search)
-void levelOrderTraversal(BinaryTree *tree); // 层序遍历
+void levelOrderTraversal(BinaryTree *tree); // 层序遍历\
+
 
 #endif //BINARY_TREE_H

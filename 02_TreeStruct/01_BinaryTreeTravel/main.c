@@ -36,6 +36,10 @@ void test1() {
     postorderTraversal(tree);
     printf("Level Order Traversal:\t");
     levelOrderTraversal(tree);
+    printf("No Recursion Preorder:\t");
+    NoRecursionPreorder(tree);
+    // printf("No Recursion Inorder:\t");
+    // NoRecursionInorder(tree);
 }
 
 int main() {

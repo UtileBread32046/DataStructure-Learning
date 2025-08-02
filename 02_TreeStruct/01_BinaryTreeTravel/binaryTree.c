@@ -92,6 +92,61 @@ void postorderTraversal(BinaryTree *tree) {
     printf("\n");
 }
 
+// 使用顺序栈作为任务的暂存空间, 从而实现无递归的三序遍历
+void NoRecursionPreorder(BinaryTree *tree) {
+    #define MaxStackSize 16
+    // 压栈时先右后左(模拟先序遍历的根左右)
+    TreeNode *stack[MaxStackSize];
+    int top = -1; // 递增满栈
+    top++;
+    stack[top] = tree->root;
+
+    while (0 <= top && top < MaxStackSize) { // 注意栈的两种溢出方向
+        TreeNode *node = stack[top];
+        visitTreeNode(node);
+        top--;
+        if (node->right) {
+            top++;
+            stack[top] = node->right;
+        }
+        if (node->left) {
+            top++;
+            stack[top] = node->left;
+        }
+    }
+    printf("\n");
+}
+
+void NoRecursionInorder(BinaryTree *tree) {
+    // 先将整个左子树全部压栈, 再依次取出并压入右子树
+    TreeNode *stack[MaxStackSize];
+    int top = -1; // 递增满栈
+    top++;
+    stack[top] = tree->root;
+
+    while (0 <= top && top < MaxStackSize) {
+        TreeNode *node = stack[top]; // 取出栈顶节点
+        if (node->left) { // 当节点的左子树存在时
+            node = node->left; // 移动节点到左子树根节点
+            top++;
+            stack[top] = node; // 压入节点的左子树(可能为空)
+        }
+        else if (node->right) { // 当节点不存在左子树但存在右子树时
+            visitTreeNode(node); // 进行访问
+            top--;
+            node = node->right; // 移动节点到右子树根节点(可能为空)
+        }
+        else { // 当节点不存在子树时
+            visitTreeNode(node); // 进行访问
+            top--;
+        }
+    }
+    printf("\n");
+}
+
+void NoRecursionPostorder(BinaryTree *tree) {
+}
+
 // 使用队列实现对二叉树的广度优先遍历
 /*
  *  1. 引入任务队列, 使根节点入队
