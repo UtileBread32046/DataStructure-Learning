@@ -1,8 +1,10 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <time.h> // 调用随机数生成和时刻记录
 #include "searchTree.h"
 
 void test1() {
+    printf("==============test1====================\n");
     int data[] = {55, 33, 100, 22, 80, 45, 130, 8, 120, 40};
     SearchTree *tree = createSearchTree();
     if (tree) {
@@ -10,8 +12,10 @@ void test1() {
             insertSearchTree(tree, data[i]);
         }
     }
+    deleteSearchTree(tree, 55);
     inorderSearchTree(tree);
     printf("\n");
+    printf("The tree root is %d.\n", tree->root->data);
     printf("The height of tree is %d.\n", heightSearchTree(tree));
     releaseSearchTree(tree);
 }
@@ -45,6 +49,7 @@ static void TreeSearch(const Element *data, int n, Element val, int times) {
     }
 }
 void test2() {
+    printf("==============test2====================\n");
     // 测试在查找失败的情况下, 线性查找与二叉搜索树查找各自的时间效率
     int n = 1000000; // 设置元素数量
     Element scope = n + 5000; // 设置取值范围
@@ -74,10 +79,8 @@ void test2() {
 }
 
 int main() {
-    printf("==============test1====================\n");
     test1();
-    printf("==============test2====================\n");
-    test2();
+    // test2();
     printf("=======================================\n");
     return 0;
 }

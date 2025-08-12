@@ -57,6 +57,60 @@ void insertSearchTree(SearchTree *tree, Element val) {
     }
 }
 
+static TreeNode *maxValueLeft(TreeNode *node) {
+    // 在删除度为2的节点时, 若选择前驱节点法, 则应找到左子树中的最右侧节点, 即为中序遍历结果中所需要的前驱节点
+    while (node->right) {
+        node = node->right;
+    } // 在跳出此循环后, node便已达到最右侧
+    return node;
+}
+static TreeNode *minValueRight(TreeNode *node) {
+    // 同理, 若选择后继节点法, 则应找到右子树中的最左侧节点, 即为所需要的后继节点
+    while (node->left) {
+        node = node->left;
+    }
+    return node;
+}
+static TreeNode *deleteTreeNode(SearchTree *tree, TreeNode *node, Element val) {
+    if (node == NULL) { // 当节点为空时即为未找到
+        printf("Find value %d failed!\n", val);
+        return NULL;
+    }
+    if (val < node->data) // 当需要删除的值小于当前节点数值时
+        node->left = deleteTreeNode(tree, node->left, val); // 寻找左子树(同时传回地址)
+    else if (val > node->data)
+        node->right = deleteTreeNode(tree, node->right, val);
+    else { // 当值恰好相等时
+        TreeNode *temp = NULL; // 设置一个临时节点
+        if (node->left == NULL) { // 当左子树为空(不存在)时, 节点只可能存在或不存在右子树, 当前节点的度为0或1(不算父节点)
+            temp = node->right; // 将temp赋值为右子树而非node自身, 防止free掉node后temp成为野指针
+            free(node); // 执行删除操作, 释放当前节点
+            tree->count--;
+            return temp; // 返回右子树状态(空或右子树的根)
+        }
+        if (node->right == NULL) { // 在上一个if判断成立返回后剩下的情况下(即左子树一定存在), 若右子树不存在, 当前节点的度为1
+            temp = node->left;
+            free(node);
+            tree->count--;
+            return temp; // 返回左子树状态
+        }
+        // 当以上两种状态均返回后, 剩下的状态即为左右子树均存在的情况, 当前节点的度为2
+        /* 前驱节点法 */
+        temp = maxValueLeft(node->left);
+        node->data = temp->data; // 用得到的前驱/后继节点的值覆盖掉当前节点
+        node->left = deleteTreeNode(tree, node->left, temp->data); // 从左子树路径再次进行递归, 将左子树中的重复值删除(该点因为位于最左子树的最右侧, 故度必为0或1)
+        /* 后继节点法 */
+        // temp = minValueRight(node->right);
+        // node->data = temp->data;
+        // node->right = deleteTreeNode(tree, node->right, temp->data);
+    }
+    return node; // 将更新后的当前节点返回上级
+}
+void deleteSearchTree(SearchTree *tree, Element val) {
+    if (tree)
+        deleteTreeNode(tree, tree->root, val);
+}
+
 void visitTreeNode(TreeNode *node) {
     printf("%d\t", node->data);
 }

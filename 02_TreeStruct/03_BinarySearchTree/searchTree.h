@@ -1,6 +1,5 @@
 #ifndef SEARCH_TREE_H
 #define SEARCH_TREE_H
-#include <stdlib.h>
 typedef int Element;
 typedef struct _node {
     Element data;
@@ -16,6 +15,7 @@ TreeNode *createTreeNode(Element val);
 SearchTree *createSearchTree();
 void releaseSearchTree(SearchTree *tree);
 void insertSearchTree(SearchTree *tree, Element  val);
+void deleteSearchTree(SearchTree *tree, Element val); // 使用递归删除二叉搜索树中的元素
 void visitTreeNode(TreeNode *node);
 void inorderSearchTree(const SearchTree *tree); // 使用中序遍历检查二叉搜索树的结构(中序遍历结果必为递增数列)
 int heightSearchTree(const SearchTree *tree); // 使用递归计算树的高度(最大值)
