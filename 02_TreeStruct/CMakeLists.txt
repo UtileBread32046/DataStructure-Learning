@@ -6,3 +6,7 @@ add_executable(ThreadBinaryTree
         02_ThreadBinaryTree/main.c
         02_ThreadBinaryTree/threadTree.c
         02_ThreadBinaryTree/threadTree.h)
+add_executable(BinarySearchTree
+        03_BinarySearchTree/main.c
+        03_BinarySearchTree/searchTree.c
+        03_BinarySearchTree/searchTree.h)
