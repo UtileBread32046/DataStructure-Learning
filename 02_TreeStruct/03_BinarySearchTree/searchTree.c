@@ -1,6 +1,7 @@
 #include "searchTree.h"
 #include <stdio.h>
 #include <stdlib.h>
+// #define RECURSION // 调用递归函数(注释掉改行代码即可开启非递归)
 
 TreeNode *createTreeNode(Element val) {
     TreeNode *node = malloc(sizeof(TreeNode));
@@ -51,10 +52,34 @@ static TreeNode *insertTreeNode(TreeNode *node, Element val) {
     return node; // 当node != NULL时, 需要将当前节点作为子树传递给上一层
 }
 void insertSearchTree(SearchTree *tree, Element val) {
+#ifdef RECURSION // 采用条件编译的方式选择递归或非递归的函数
     if (tree) {
         tree->root = insertTreeNode(tree->root, val); // 从根节点开始插入新节点, 一路返回插入后的地址路径
         tree->count++;
     }
+#else // 非递归模式
+    TreeNode *cur = tree->root; // 从根节点出发的当前节点指针
+    TreeNode *pre = NULL; // 引入辅助指针, 指向前一位的节点指针, 初始为空
+    while (cur) { // 当节点存在时
+        pre = cur; // 先将前一位指针移动到当前节点位置, 再移动当前的指针
+        if (val < cur->data)
+            cur = cur->left;
+        else if (val > cur->data)
+            cur = cur->right;
+        else
+            return; // 默认二叉树中不可包含重复元素, 若有则直接返回
+    }
+    TreeNode *node = createTreeNode(val);
+    if (pre) { // 此时跳出循环且pre存在, 则为正常位置
+        if (val < pre->data)
+            pre->left = node;
+        else
+            pre->right = node;
+    } else { // 当pre为空时, 则未进入while循环, 即证明树中不存在根节点
+        tree->root = node;
+    }
+    tree->count++;
+#endif
 }
 
 static TreeNode *maxValueLeft(TreeNode *node) {
@@ -107,8 +132,53 @@ static TreeNode *deleteTreeNode(SearchTree *tree, TreeNode *node, Element val) {
     return node; // 将更新后的当前节点返回上级
 }
 void deleteSearchTree(SearchTree *tree, Element val) {
+#ifdef RECURSION
     if (tree)
         deleteTreeNode(tree, tree->root, val);
+#else //  非递归式
+    TreeNode *pre = NULL;
+    TreeNode *node = tree->root;
+    while (node) { // 寻找数据相符的节点
+        if (val < node->data) {
+            pre = node; // 移动前置节点指针
+            node = node->left;
+        } else if (val > node->data) {
+            pre = node;
+            node = node->right;
+        } else
+            break;
+    }
+
+    if (node == NULL) { // 未找到节点
+        printf("Find value %d failed!\n", val);
+        return;
+    }
+    TreeNode *temp = NULL;
+    if (node->left == NULL) { // 当左子树为空时, 节点度数为0或1
+        temp = node->right;
+        pre->right = temp; // 连接右子树
+        free(node);
+        tree->count--;
+    } else if (node->right == NULL) {
+        temp = node->left;
+        pre->left = temp;
+        free(node);
+        tree->count--;
+    } else { // 此时节点度数为2
+        temp = node->right; // 移动到右子树的根节点
+        TreeNode *parent =  NULL;
+        while (temp->left) { // 寻找后继节点及其父节点
+            parent = temp;
+            temp = temp->left;
+        }
+        if (parent) // 父节点的左子树为后继节点, 而后继节点只可能存在右子树
+            parent->left = temp->right;
+        else // 若右子树根节点即为最小值
+            node->right = temp->right;
+        free(temp);
+        tree->count--;
+    }
+#endif
 }
 
 void visitTreeNode(TreeNode *node) {
