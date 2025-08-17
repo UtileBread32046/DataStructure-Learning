@@ -10,3 +10,7 @@ add_executable(BinarySearchTree
         03_BinarySearchTree/main.c
         03_BinarySearchTree/searchTree.c
         03_BinarySearchTree/searchTree.h)
+add_executable(AVLTree
+        04_AVLTree/main.c
+        04_AVLTree/AVLTree.c
+        04_AVLTree/AVLTree.h)
