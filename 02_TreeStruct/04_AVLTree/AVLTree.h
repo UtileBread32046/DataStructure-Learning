@@ -19,5 +19,6 @@ void insertAVLTree(AVLTree *tree, Element val);
 void visitTreeNode(const TreeNode *node);
 void inorderAVLTree(const AVLTree *tree); // 使用中序遍历对平衡二叉树进行遍历
 int heightAVLTree(const AVLTree *tree); // 获取平衡二叉树的高度
+void deleteAVLTree(AVLTree *tree, Element val); // 删除指定节点
 
 #endif //AVL_TREE_H

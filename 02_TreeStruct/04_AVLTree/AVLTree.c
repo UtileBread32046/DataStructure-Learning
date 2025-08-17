@@ -25,16 +25,16 @@ AVLTree * createAVLTree() {
     return tree;
 }
 
-static void deleteTreeNode(AVLTree *tree, TreeNode *node) {
+static void releaseTreeNode(AVLTree *tree, TreeNode *node) {
     if (node) {
-        deleteTreeNode(tree, node->left);
-        deleteTreeNode(tree, node->right);
+        releaseTreeNode(tree, node->left);
+        releaseTreeNode(tree, node->right);
         free(node);
         tree->count--;
     }
 }
 void releaseAVLTree(AVLTree *tree) {
-    deleteTreeNode(tree, tree->root);
+    releaseTreeNode(tree, tree->root);
     printf("The tree has been cleared: %d element left.\n", tree->count);
     free(tree);
 }
@@ -91,14 +91,14 @@ static int getBalance(TreeNode *node) { // 获取当前节点平衡因子
     if (node)
         return getHeight(node->left) - getHeight(node->right);
 }
-static TreeNode *rotateOperation(TreeNode *node, int balance, int val) { // 自定义旋转操作函数
+static TreeNode *rotateOperation(TreeNode *node, int balance) { // 自定义旋转操作函数
     if (balance > 1) {
-        if (val > node->left->data) // LR
+        if (getBalance(node->left) < 0) // LR; 获取子树根节点的平衡因子进行判断
             node->left = leftRotate(node->left); // LR: 先左旋左子树, 转化为LL(若为LL则无此步骤)
         return rightRotate(node); // LL: 右旋根节点
     }
     if (balance < -1) {
-        if (val < node->right->data) // RL
+        if (getBalance(node->right) > 0) // RL
             node->right = rightRotate(node->right);
         return leftRotate(node); // RR
     }
@@ -118,7 +118,7 @@ static TreeNode *insertTreeNode(AVLTree *tree, TreeNode *node, Element val) {
     refreshHeight(node); // 当前节点在回归的过程, 需依次更新该路径中节点的高度, 同时检测平衡因子, 发现失衡节点并进行处理
     // 计算平衡因子进行旋转
     int balance = getBalance(node);
-    return rotateOperation(node, balance, val); // 进行旋转操作
+    return rotateOperation(node, balance); // 进行旋转操作
 }
 void insertAVLTree(AVLTree *tree, Element val) {
     if (tree->root)
@@ -151,4 +151,46 @@ void inorderAVLTree(const AVLTree *tree) {
 
 int heightAVLTree(const AVLTree *tree) {
     return getHeight(tree->root);
+}
+
+static TreeNode *deleteTreeNode(AVLTree *tree, TreeNode *node, Element val) {
+    if (node == NULL) { // 递归到空节点时, 判断为未找到
+        printf("Find value %d failed!\n", val);
+        return NULL;
+    }
+    if (val < node->data)
+        node->left = deleteTreeNode(tree, node->left, val); // 别忘了返回删除的信息(可能会改变子树的根节点)
+    else if (val > node->data)
+        node->right = deleteTreeNode(tree, node->right, val);
+    else { // 找到目标节点
+        TreeNode *temp = NULL;
+        if (node->left == NULL || node->right == NULL) { // 只可能存在0或1个子树时
+            temp = (node->left != NULL) ? node->left : node->right;
+            if (temp == NULL) { // 节点的度为0
+                free(node);
+                tree->count--;
+                return NULL; // 此时原节点地址为空, 注意返回
+            }
+            // temp指向非空的子树
+            node->data = temp->data; // 将temp节点的信息传给node
+            node->left = temp->left;
+            node->right = temp->right;
+            free(temp);
+            tree->count--;
+        } else { // 节点的度为2, 寻找前驱节点
+            temp = node->left;
+            while (temp->right)
+                temp = temp->right; // 寻找左子树中的最右侧节点, 即为前驱节点, 且只可能存在左子树
+            node->data = temp->data; // 将temp值赋给node
+            deleteTreeNode(tree, node->left, temp->data); // 在左子树中重新进入递归, 删除temp节点
+        }
+    }
+    // 回归的过程更新节点高度与平衡因子, 进行旋转操作
+    refreshHeight(node);
+    int balance = getBalance(node);
+    return rotateOperation(node, balance);
+}
+void deleteAVLTree(AVLTree *tree, Element val) {
+    if (tree)
+        tree->root = deleteTreeNode(tree, tree->root, val);
 }
