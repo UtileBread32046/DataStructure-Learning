@@ -14,3 +14,11 @@ add_executable(AVLTree
         04_AVLTree/main.c
         04_AVLTree/AVLTree.c
         04_AVLTree/AVLTree.h)
+add_executable(QuickFindSet
+        05_UnionFindSet/main1.c
+        05_UnionFindSet/quickFind.c
+        05_UnionFindSet/quickFind.h)
+add_executable(QuickUnionSet
+        05_UnionFindSet/main2.c
+        05_UnionFindSet/quickUnion.c
+        05_UnionFindSet/quickUnion.h)
