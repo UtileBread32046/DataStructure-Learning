@@ -1,7 +1,7 @@
 #include "searchTree.h"
 #include <stdio.h>
 #include <stdlib.h>
-// #define RECURSION // 调用递归函数(注释掉改行代码即可开启非递归)
+// #define RECURSION // 调用递归函数(注释掉该行代码即可开启非递归)
 
 TreeNode *createTreeNode(Element val) {
     TreeNode *node = malloc(sizeof(TreeNode));
