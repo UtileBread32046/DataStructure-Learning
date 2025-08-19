@@ -22,3 +22,7 @@ add_executable(QuickUnionSet
         05_UnionFindSet/main2.c
         05_UnionFindSet/quickUnion.c
         05_UnionFindSet/quickUnion.h)
+add_executable(HuffmanTree
+        06_HuffmanTree/main.c
+        06_HuffmanTree/HuffmanTree.c
+        06_HuffmanTree/HuffmanTree.h)
