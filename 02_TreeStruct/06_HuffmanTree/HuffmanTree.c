@@ -84,6 +84,27 @@ static void coding(HuffmanTree tree, int nodeIndex, HuffmanCode *codes, int *sum
     }
 }
 #else
+static void coding(HuffmanTree tree, HuffmanCode *codes, HuffmanCode temp, int n) {
+    for (int i = 0; i < n; i++) { // 寻找有实际意义的n个节点的路径
+        int index = i; // 记录当前索引位置, 防止跳出for循环
+        // 因为是从叶子节点向上寻找根节点, 故生成编码序列为倒序
+        temp[n] = '\0'; // 设置终止符
+        int sum = 0; // 记录上升层数
+        while (tree[index].parent != 0) {
+            int insertIndex = (n-1)-sum; // 倒序插入位置
+            int parentIndex = tree[index].parent;
+            if (tree[parentIndex].left == index) // 判断当前节点是父节点的左子树还是右子树
+                temp[insertIndex] = '0';
+            else
+                temp[insertIndex] = '1';
+            index = parentIndex; // 移动到父节点位置, 直至寻找到根节点
+            sum++;
+        }
+        codes[i] = malloc(sizeof(char) * (sum+1)); // 共有sum+'\0'个字符
+        int start = n - sum; // 从下标n处开始, 倒序计数sum个到达copy位置
+        strcpy(codes[i], &temp[start]); // 应传入具有实际字符的首地址, 到'\0'处自动结束
+    }
+}
 #endif
 HuffmanCode *createHuffmanCode(HuffmanTree tree, int n) {
     HuffmanCode *codes = malloc(sizeof(HuffmanCode) * n);
@@ -91,9 +112,6 @@ HuffmanCode *createHuffmanCode(HuffmanTree tree, int n) {
         fprintf(stderr, "codes malloc failed!\n");
         return NULL;
     }
-
-#ifdef RECURSION
-    int sum  = 0; // 记录编码长度
     // 哈夫曼编码最大长度不超过叶子节点数(n), 至少应分配n+1个字节(预留结束符\0的位置)
     HuffmanCode temp = malloc(sizeof(char) * (n+1)); // 设置临时编码记录; 若使用sizeof(HuffmanCode)则是申请的指针大小, 而非存储编码所需的字符数组大小
     if (temp == NULL) {
@@ -101,9 +119,12 @@ HuffmanCode *createHuffmanCode(HuffmanTree tree, int n) {
         free(codes); // 释放已分配的codes, 防止内存泄漏
         return NULL;
     }
+#ifdef RECURSION
+    int sum  = 0; // 记录编码长度
     coding(tree, 2*n-2, codes, &sum, n, temp); // 根节点是第2n-1个节点, 下标为2n-2
-    free(temp); // 释放临时编码, 避免内存泄漏
 #else
+    coding(tree, codes, temp, n);
 #endif
+    free(temp); // 释放临时编码, 避免内存泄漏
     return codes;
 }

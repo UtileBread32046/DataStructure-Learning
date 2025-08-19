@@ -1,6 +1,6 @@
 #ifndef HUFFMAN_TREE_H
 #define HUFFMAN_TREE_H
-#define RECURSION // 递归编码模式, 注释掉可开启非递归
+// #define RECURSION // 递归编码模式, 注释掉可开启非递归
 
 // 采用顺序存储的方式, 定义哈夫曼树的节点结构, 并使用下表索引来标识不同的节点
 typedef struct {
