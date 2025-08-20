@@ -23,6 +23,12 @@ ListGraph * createListGraph(int n) {
 }
 
 void releaseListGraph(ListGraph *graph) {
+    if (graph) {
+        if (graph->vertices)
+            free(graph->vertices);
+        free(graph);
+        printf("The graph has been cleared!\n");
+    }
 }
 
 void initListGraph(ListGraph *graph, char *names[], int directed) {

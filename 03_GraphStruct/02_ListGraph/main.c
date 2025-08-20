@@ -18,6 +18,8 @@ void test1() {
     printf("There are %d vertices and %d arcs in the graph:\n", graph->vertexNum, graph->arcNum);
     DFSListGraph(graph, 0);
     BFSListGraph(graph, 0);
+
+    releaseListGraph(graph);
 }
 
 int main() {
