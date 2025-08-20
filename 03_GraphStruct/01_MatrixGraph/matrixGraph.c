@@ -24,7 +24,7 @@ static int judgeEdgeExistence(MatrixGraph *graph, int v1, int v2) { // 通过两
     return 0; // 不存在
 }
 void addEdgeToGraph(MatrixGraph *graph, int v1, int v2, int weight) {
-    if (v1 < 0 || v2 < 0 ||  v1 > graph->vertexNum || v2 > graph->vertexNum) {
+    if (v1 < 0 || v2 < 0 ||  v1 >= graph->vertexNum || v2 >= graph->vertexNum) {
         printf("The index is out of range!\n");
         return;
     }
