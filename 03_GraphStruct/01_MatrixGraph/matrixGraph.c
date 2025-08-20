@@ -58,7 +58,7 @@ static void DFSGraphVertices(MatrixGraph *graph, int index) {
 }
 void DFSMatrixGraph(MatrixGraph *graph, int index) {
     if (graph) {
-        printf("DFS Mode: ");
+        printf("DFS Traversal: ");
         initVisitedVertices(visitedVertices);
         DFSGraphVertices(graph, index);
         printf("\n");
@@ -87,7 +87,7 @@ static void BFSGraphVertices(MatrixGraph *graph, int index) {
 }
 void BFSMatrixGraph(MatrixGraph *graph, int index) {
     if (graph) {
-        printf("BFS Mode: ");
+        printf("BFS Traversal: ");
         initVisitedVertices(visitedVertices);
         BFSGraphVertices(graph, index);
         printf("\n");
