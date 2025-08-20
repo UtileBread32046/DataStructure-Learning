@@ -16,7 +16,7 @@ void test1() {
     addEdgeToGraph(&graph, 4, 7, 1);
     addEdgeToGraph(&graph, 5, 6, 1);
 
-    printf("There are %d vertices and %d edges in the graph:\n", graph.nodeNum, graph.edgeNum);
+    printf("There are %d vertices and %d edges in the graph:\n", graph.vertexNum, graph.edgeNum);
     DFSMatrixGraph(&graph, 0);
     BFSMatrixGraph(&graph, 0);
 }

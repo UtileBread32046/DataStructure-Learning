@@ -11,7 +11,7 @@ typedef struct {
 typedef int MatrixEdge; // 定义邻接矩阵的边类型(记录边的权重值)
 // 图的邻接矩阵表示法
 typedef struct {
-    int nodeNum; // 记录实际的顶点个数
+    int vertexNum; // 记录实际的顶点个数
     int edgeNum; // 记录边个数
     int directed; // 记录图是否有方向
     MatrixVertex vertices[MAX_SIZE]; // 定义顶点集
