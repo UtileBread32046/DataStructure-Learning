@@ -7,3 +7,6 @@ add_executable(listGraph 02_ListGraph/main.c
 add_executable(crossLinkGraph 03_CrossLinkGraph/main.c
         03_CrossLinkGraph/crossLinkGraph.c
         03_CrossLinkGraph/crossLinkGraph.h)
+add_executable(multiListGraph 04_MultiListGraph/main.c
+        04_MultiListGraph/multiListGraph.c
+        04_MultiListGraph/multiListGraph.h)
