@@ -51,9 +51,13 @@ void initCrossListGraph(CrossListGraph *graph, char *names[]) {
 }
 
 void addArcToGraph(CrossListGraph *graph, int tail, int head, int weight) {
+    if (tail < 0 || head < 0 || tail >= graph->vertexNum || head >= graph->vertexNum) {
+        printf("The index is out of range!\n");
+        return;
+    }
     Arc *new_arc = malloc(sizeof(Arc));
     if (new_arc == NULL) {
-        fprintf(stderr, "arcs malloc failed!\n");
+        fprintf(stderr, "arc malloc failed!\n");
         return;
     }
     new_arc->weight = weight;
