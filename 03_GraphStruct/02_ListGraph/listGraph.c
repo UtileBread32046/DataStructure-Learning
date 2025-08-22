@@ -24,10 +24,22 @@ ListGraph * createListGraph(int n) {
 
 void releaseListGraph(ListGraph *graph) {
     if (graph) {
-        if (graph->vertices)
+        if (graph->vertices) { // 当顶点集存在时
+            for (int i = 0; i < graph->vertexNum; i++) {
+                Arc *arc = graph->vertices[i].firstArc;
+                Arc *temp = NULL; // 此处不初始化为arc, 防止temp赋值到已被释放的arc
+                while (arc) {
+                    temp = arc;
+                    arc = arc->next;
+                    free(temp); // 将边集依次释放
+                    graph->arcNum--;
+                }
+            }
             free(graph->vertices);
+            graph->vertexNum = 0;
+        }
+        printf("The graph has been cleared: %d vertex and %d arc left.\n", graph->vertexNum, graph->arcNum);
         free(graph);
-        printf("The graph has been cleared!\n");
     }
 }
 
